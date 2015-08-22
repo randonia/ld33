@@ -28,13 +28,18 @@ Input = {
     },
     'toDebugString': function()
     {
-        var result = '{';
+        var result = 'CurrKeys: { ';
         for (var key in this.keysCurrDown)
         {
             result += String.fromCharCode(key) + ' ';
         }
-        result += '}';
-        return result;
+        result += ' }\n';
+        result += 'LastKeys: { ';
+        for (var key in this.keysLastDown)
+        {
+            result += String.fromCharCode(key) + ' ';
+        }
+        return result + ' }';
     }
 };
 onkeydown = function(event)
@@ -101,7 +106,12 @@ function update(delta)
     {
         game_objects[i].update(delta);
     };
+    DEBUGTEXT.text += sprintf('\nPlayer grid position: %s', player.gPos.toString());
     // Clean up keysLastDown
+    for (var key in Input.keysLastDown)
+    {
+        delete Input.keysLastDown[key];
+    }
     for (var key in Input.keysCurrDown)
     {
         Input.keysLastDown[key] = Input.keysCurrDown[key];
