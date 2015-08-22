@@ -7,7 +7,9 @@ Ludum Dare 33
 
 ### Serving files locally ###
 The easiest way to serve files locally is to use Python2.7. Run
+
     serve2.7.py
+
 which has a monkey patch for Windows to make it not slow
 
 #### Libraries/Frameworks/Tools ####
