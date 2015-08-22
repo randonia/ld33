@@ -29,18 +29,24 @@ function onAssetsComplete()
         last_frame = curr_frame;
     }, 1000 / FPS);
 }
+var grid;
+var player;
 
 function build_world()
 {
     world = new PIXI.Container();
+    world.position.x = WIDTH * 0.5;
+    world.position.y = HEIGHT * 0.5;
+    grid = new Grid(32, 32);
+    game_objects.push(grid);
     // Create the game objects
-    var player = new Player();
-    player.pos.x = WIDTH * 0.5;
-    player.pos.y = HEIGHT * 0.5;
+    player = new Player();
     var go = new GameObject();
+    go.pos = Vec(50, 50);
     game_objects.push(player);
     game_objects.push(go);
     // Don't forget to add their sprite to the world
+    world.addChild(grid.sprite);
     world.addChild(go.sprite);
     world.addChild(player.sprite);
 }
@@ -58,3 +64,18 @@ function animate(delta)
     requestAnimationFrame(animate);
     renderer.render(world);
 }
+onkeydown = function(event)
+{
+    InputKeys[event.keyCode] = true;
+}
+onkeyup = function(event)
+{
+    InputKeys[event.keyCode]
+}
+// Build Keys.* to map to their keyCodes
+Keys = {};
+InputKeys = {};
+for (var kc = 65; kc <= 90; kc++)
+{
+    Keys[String.fromCharCode(kc)] = kc;
+};
