@@ -26,6 +26,10 @@ Input = {
     {
         return this.keysCurrDown[keyCode] && !this.keysLastDown[keyCode]
     },
+    'keyDown': function(keyCode)
+    {
+        return this.keysCurrDown[keyCode];
+    },
     'toDebugString': function()
     {
         var result = 'CurrKeys: { ';

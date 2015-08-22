@@ -19,24 +19,49 @@ Player.prototype.buildSprite = function()
 Player.prototype.update = function(delta)
 {
     this._super.update.call(this, delta);
-    this.handleInput();
+    switch (this.state)
+    {
+        case GameObjectState.IDLE:
+            if (this.handleInput())
+            {
+                this.state = GameObjectState.MOVING;
+            }
+            break;
+        case GameObjectState.MOVING:
+            if (!this.deltaMovement)
+            {
+                this.state = GameObjectState.IDLE;
+            }
+            break;
+        case GameObjectState.DEAD:
+            break;
+    }
 };
 Player.prototype.handleInput = function()
 {
-    if (Input.keyPressed(Keys.A))
+    var movement = false;
+    if (Input.keyDown(Keys.A))
     {
         this.gPos.x -= 1;
+        movement = true;
     }
-    if (Input.keyPressed(Keys.D))
+    if (Input.keyDown(Keys.D))
     {
         this.gPos.x += 1;
+        movement = true;
     }
-    if (Input.keyPressed(Keys.W))
+    if (Input.keyDown(Keys.W))
     {
         this.gPos.y -= 1;
+        movement = true;
     }
-    if (Input.keyPressed(Keys.S))
+    if (Input.keyDown(Keys.S))
     {
         this.gPos.y += 1;
+        movement = true;
     }
+    // Prepare for more actions
+    return {
+        'movement': movement
+    };
 };

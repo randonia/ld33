@@ -16,6 +16,7 @@ function GameObject()
     this.sprite = this.buildSprite();
     this.state = GameObjectState.IDLE;
     this.moveSpeed = 2 * 32; // 1/2 a second per grid
+    this.deltaMovement = null;
 }
 GameObject.prototype.buildSprite = function()
 {
@@ -49,6 +50,7 @@ GameObject.prototype.tickUpdatePosition = function(delta)
     var dY = dest.y - this.pos.y;
     if (Math.abs(dX) > MOVE_STOP_THRESHOLD || Math.abs(dY) > MOVE_STOP_THRESHOLD)
     {
+        this.deltaMovement = Vec(dX, dY);
         var dir = Vec(dX, dY).normalize();
         this.pos.add(dir.mult(this.moveSpeed * delta));
         DEBUGTEXT.text += sprintf('\nPlayerDir: %s', dir.toString());
@@ -57,6 +59,7 @@ GameObject.prototype.tickUpdatePosition = function(delta)
     else
     {
         this.pos = dest;
+        this.deltaMovement = null;
     }
     this.sprite.position.x = this.pos.x;
     this.sprite.position.y = this.pos.y;
