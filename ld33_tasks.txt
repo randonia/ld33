@@ -1,0 +1,22 @@
+==============
+LD33 TODO List
+==============
+
+    Mechanics
+    + Turn based movement
+        synchronize all actors
+        'decision' making
+        'pathfinding'?
+    + actor perception and reaction
+        shooting
+        fleeing
+        alerting?
+    + player interaction
+        movement
+        conversion
+        stealth
+        death
+
+    Art
+    + A lot of sprites
+    + Minimal horror audio
