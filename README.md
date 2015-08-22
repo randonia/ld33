@@ -6,11 +6,11 @@ Ludum Dare 33
 @zambini845
 
 #### Libraries/Frameworks/Tools ####
-    * [PIXI][1]
-    * [sprintf][2]
-    * [Pyxel Editor][3]
-    * [Sublime Text][4]
-    * [Open Broadcaster Software][5]
+* [PIXI][1]
+* [sprintf][2]
+* [Pyxel Editor][3]
+* [Sublime Text][4]
+* [Open Broadcaster Software][5]
 
 
 [1]: http://www.pixijs.com/
