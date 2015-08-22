@@ -4,6 +4,7 @@ var WIDTH = 640;
 // Init PIXI
 var game_container = document.getElementById('game-container');
 var renderer = PIXI.autoDetectRenderer(WIDTH, HEIGHT);
+renderer.clearBeforeRender = false;
 game_container.appendChild(renderer.view);
 // Asset loading
 // Sprite creation
@@ -14,6 +15,48 @@ PIXI.loader.add(assets_to_load).on('progress', function(loader, resource)
 }).load(onAssetsComplete);
 var world;
 var game_objects = [];
+// Build Keys.* to map to their keyCodes
+Keys = {};
+Input = {
+    'keysCurrDown':
+    {},
+    'keysLastDown':
+    {},
+    'keyPressed': function(keyCode)
+    {
+        return this.keysCurrDown[keyCode] && !this.keysLastDown[keyCode]
+    },
+    'toDebugString': function()
+    {
+        var result = '{';
+        for (var key in this.keysCurrDown)
+        {
+            result += String.fromCharCode(key) + ' ';
+        }
+        result += '}';
+        return result;
+    }
+};
+onkeydown = function(event)
+{
+    Input.keysCurrDown[event.keyCode] = true;
+}
+onkeyup = function(event)
+{
+    delete Input.keysCurrDown[event.keyCode];
+}
+for (var kc = 65; kc <= 90; kc++)
+{
+    Keys[String.fromCharCode(kc)] = kc;
+};
+var dbg_text_opts = {
+    font: '12px Monaco',
+    fill: '#00ff00',
+    stroke: 'black'
+}
+var DEBUGTEXT = new PIXI.Text('Debug', dbg_text_opts);
+DEBUGTEXT.position.x = 10;
+DEBUGTEXT.position.y = 10;
 
 function onAssetsComplete()
 {
@@ -53,29 +96,21 @@ function build_world()
 
 function update(delta)
 {
+    DEBUGTEXT.text = Input.toDebugString();
     for (var i = game_objects.length - 1; i >= 0; i--)
     {
         game_objects[i].update(delta);
     };
+    // Clean up keysLastDown
+    for (var key in Input.keysCurrDown)
+    {
+        Input.keysLastDown[key] = Input.keysCurrDown[key];
+    }
 }
 
 function animate(delta)
 {
     requestAnimationFrame(animate);
     renderer.render(world);
+    renderer.render(DEBUGTEXT);
 }
-onkeydown = function(event)
-{
-    InputKeys[event.keyCode] = true;
-}
-onkeyup = function(event)
-{
-    InputKeys[event.keyCode]
-}
-// Build Keys.* to map to their keyCodes
-Keys = {};
-InputKeys = {};
-for (var kc = 65; kc <= 90; kc++)
-{
-    Keys[String.fromCharCode(kc)] = kc;
-};

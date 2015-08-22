@@ -14,3 +14,14 @@ Player.prototype.buildSprite = function()
     mc.play();
     return mc;
 };
+Player.prototype.update = function(delta)
+{
+    this.handleInput();
+};
+Player.prototype.handleInput = function()
+{
+    if (Input.keyPressed(Keys.A))
+    {
+        this.gPos += 1;
+    }
+};

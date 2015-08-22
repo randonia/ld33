@@ -18,7 +18,6 @@ GameObject.prototype.update = function(delta)
 {
     this.pos.x = grid.gridToWorld('x', this.gPos.x);
     this.pos.y = grid.gridToWorld('y', this.gPos.y);
-
     this.sprite.position.x = this.pos.x;
     this.sprite.position.y = this.pos.y;
 };
