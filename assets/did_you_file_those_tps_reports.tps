@@ -100,7 +100,7 @@
             <int>-1</int>
         </QSize>
         <key>reduceBorderArtifacts</key>
-        <false/>
+        <true/>
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
@@ -147,7 +147,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>sheets/player.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -174,7 +174,7 @@
             <key>scale</key>
             <double>1</double>
             <key>scaleMode</key>
-            <enum type="ScaleMode">Smooth</enum>
+            <enum type="ScaleMode">Fast</enum>
             <key>innerPadding</key>
             <uint>0</uint>
             <key>extrude</key>
@@ -191,6 +191,7 @@
         <key>fileList</key>
         <array>
             <filename>images/player</filename>
+            <filename>images/terrain</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

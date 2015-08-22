@@ -11,7 +11,7 @@ function Grid(width, height)
     this.hWidth = this.width * 0.5;
     this.height = height;
     this.hHeight = this.height * 0.5;
-    this.sprite = this.buildDebugSprite();
+    this.sprite = this.buildSprite();
 }
 // Pass in {'x':0, 'y':0}
 Grid.prototype.gridToWorld = function(prop, val)
@@ -22,21 +22,34 @@ Grid.prototype.gridToWorld = function(prop, val)
     }
     return 0;
 };
-Grid.prototype.buildDebugSprite = function()
+Grid.prototype.buildSprite = function()
 {
-    var graphics = new PIXI.Graphics();
-    graphics.lineStyle(1, 0xF0F0F0, 0.25);
+    var worldSprite = new PIXI.Graphics();
     for (var x = -this.hWidth; x <= this.hWidth; ++x)
     {
-        graphics.moveTo(x * this.gridSize.x, -this.hHeight * this.gridSize.y);
-        graphics.lineTo(x * this.gridSize.x, this.hHeight * this.gridSize.y);
+        for (var y = -this.hHeight; y <= this.hHeight; ++y)
+        {
+            console.log(sprintf('Building sprite located at [%d,%d]', x, y));
+            var tileSprite = new PIXI.Sprite(PIXI.Texture.fromImage('ground_0.png'));
+            tileSprite.position.x = x * this.gridSize.x;
+            tileSprite.position.y = y * this.gridSize.y;
+            worldSprite.addChild(tileSprite);
+        }
+    }
+    var gridSprite = new PIXI.Graphics();
+    gridSprite.lineStyle(1, 0xF0F0F0, 0.25);
+    for (var x = -this.hWidth; x <= this.hWidth; ++x)
+    {
+        gridSprite.moveTo(x * this.gridSize.x, -this.hHeight * this.gridSize.y);
+        gridSprite.lineTo(x * this.gridSize.x, this.hHeight * this.gridSize.y);
     }
     for (var y = -this.hHeight; y <= this.hHeight; ++y)
     {
-        graphics.moveTo(-this.hWidth * this.gridSize.x, y * this.gridSize.y);
-        graphics.lineTo(this.hWidth * this.gridSize.x, y * this.gridSize.y);
+        gridSprite.moveTo(-this.hWidth * this.gridSize.x, y * this.gridSize.y);
+        gridSprite.lineTo(this.hWidth * this.gridSize.x, y * this.gridSize.y);
     }
-    return graphics;
+    worldSprite.addChild(gridSprite);
+    return worldSprite;
 };
 Grid.prototype.update = function(delta)
 {

@@ -55,9 +55,10 @@ for (var kc = 65; kc <= 90; kc++)
     Keys[String.fromCharCode(kc)] = kc;
 };
 var dbg_text_opts = {
-    font: '12px Monaco',
+    font: '12px Arial',
     fill: '#00ff00',
-    stroke: 'black'
+    stroke: 'black',
+    strokeThickness: 3
 }
 var DEBUGTEXT = new PIXI.Text('Debug', dbg_text_opts);
 DEBUGTEXT.position.x = 10;
