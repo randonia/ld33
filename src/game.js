@@ -95,13 +95,17 @@ function build_world()
     // Create the game objects
     player = new Player();
     var go = new GameObject();
-    go.pos = Vec(50, 50);
-    game_objects.push(player);
+    go.gPos = Vec(5, 5);
     game_objects.push(go);
+    var civ = new Civilian();
+    civ.gPos = Vec(4, 0)
+    game_objects.push(civ);
+    game_objects.push(player);
     // Don't forget to add their sprite to the world
-    world.addChild(grid.sprite);
-    world.addChild(go.sprite);
-    world.addChild(player.sprite);
+    for (var i = 0; i < game_objects.length; ++i)
+    {
+        world.addChild(game_objects[i].sprite);
+    };
 }
 
 function update(delta)

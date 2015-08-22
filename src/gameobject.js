@@ -24,6 +24,13 @@ GameObject.prototype.buildSprite = function()
     sprite.anchor.x = sprite.anchor.y = 0.5;
     return sprite;
 };
+GameObject.prototype.buildMovieClip = function(mc_frames) {
+    var mc = PIXI.extras.MovieClip.fromFrames(mc_frames);
+    mc.anchor.x = mc.anchor.y = 0.5;
+    mc.animationSpeed = 0.25;
+    mc.play();
+    return mc;
+};
 GameObject.prototype.update = function(delta)
 {
     switch (this.state)

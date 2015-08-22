@@ -11,8 +11,11 @@ LD33 TODO List
         shooting
         fleeing
         alerting?
+    + create actors
+        civilian
+        police
     + player interaction
-        movement
+        # movement
         conversion
         stealth
         death
