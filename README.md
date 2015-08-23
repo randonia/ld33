@@ -15,6 +15,7 @@ which has a monkey patch for Windows to make it not slow
 #### Libraries/Frameworks/Tools ####
 * [PIXI][1]
 * [sprintf][2]
+* [tween.js][7]
 * [Pyxel Editor][3]
 * [Sublime Text][4]
 * [Open Broadcaster Software][5]
@@ -27,3 +28,4 @@ which has a monkey patch for Windows to make it not slow
 [4]: http://www.sublimetext.com/
 [5]: https://obsproject.com/
 [6]: http://python.org
+[7]: https://github.com/tweenjs/tween.js

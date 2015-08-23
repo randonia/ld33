@@ -14,6 +14,8 @@ PIXI.loader.add(assets_to_load).on('progress', function(loader, resource)
     console.log('Loader progress on ' + resource.url + '[' + loader.progress + ']');
 }).load(onAssetsComplete);
 var world;
+var GUI;
+var gui_elements = {};
 var game_objects = [];
 // Build Keys.* to map to their keyCodes
 Keys = {};
@@ -68,17 +70,25 @@ var DEBUGTEXT = new PIXI.Text('Debug', dbg_text_opts);
 DEBUGTEXT.position.x = 10;
 DEBUGTEXT.position.y = 10;
 var DEBUGGFX = new PIXI.Graphics();
+var GameSate = {
+    'PLAYING': 0x01,
+    'DEAD': 0x02
+};
+var state = GameSate.PLAYING;
 
 function onAssetsComplete()
 {
     build_world();
+    build_gui();
     requestAnimationFrame(animate);
     var FPS = 60;
-    var last_frame = +new Date;
+    var start_frame = +new Date;
+    var last_frame = start_frame;
     setInterval(function()
     {
         var curr_frame = +new Date;
         var delta = (curr_frame - last_frame) * 0.001;
+        TWEEN.update(curr_frame - start_frame);
         update(delta);
         last_frame = curr_frame;
     }, 1000 / FPS);
@@ -104,7 +114,7 @@ function build_world()
     civ.gPos = Vec(4, 0)
     civ.pos = grid.gridToWorld(null, civ.gPos);
     police = new Police();
-    police.gPos = Vec(9, -4);
+    police.gPos = Vec(4, -4);
     police.pos = grid.gridToWorld(null, police.gPos);
     game_objects.push(civ);
     game_objects.push(player);
@@ -117,25 +127,80 @@ function build_world()
     cmgr = new CollisionManager();
 }
 
+function build_gui()
+{
+    GUI = new PIXI.Container();
+    var dead_gui = new PIXI.Container();
+    dead_gui.position.x = WIDTH * 0.5;
+    dead_gui.position.y = HEIGHT * 0.5;
+    var shade = new PIXI.Graphics();
+    shade.beginFill(0x000000, 0.4);
+    shade.drawRect(0, 0, WIDTH, HEIGHT);
+    shade.position.x = -dead_gui.position.x;
+    shade.position.y = -dead_gui.position.y;
+    dead_gui.addChild(shade);
+    var dead_gui_opts = {
+        font: '32px Trebuchet MS',
+        fill: '#a4001e',
+        stroke: 'black',
+        strokeThickness: 3
+    }
+    var dead_text = new PIXI.Text('You were caught', dead_gui_opts);
+    dead_text.position.x = -Math.floor(dead_text.width * 0.5);
+    dead_gui.addChild(dead_text);
+    var continue_gui_opts = {
+        font: '18px Trebuchet MS',
+        size: 20,
+        fill: '#a4001e',
+        stroke: 'black',
+        strokeThickness: 3
+    }
+    var continue_text = new PIXI.Text('Press [R] to Restart', continue_gui_opts);
+    continue_text.position.x = -Math.floor(continue_text.width * 0.5);
+    continue_text.position.y = dead_text.position.y + 50;
+    dead_gui.addChild(continue_text);
+    dead_gui.visible = false;
+    GUI.addChild(dead_gui);
+    gui_elements['dead_gui'] = dead_gui;
+}
+
 function update(delta)
 {
     DEBUGTEXT.text = Input.toDebugString();
     DEBUGGFX.clear();
-    cmgr.clearTheGrid();
-    for (var i = game_objects.length - 1; i >= 0; i--)
+    switch (state)
     {
-        cmgr.addToTheGrid(game_objects[i]);
-    };
-    // Oh baby this is a big line
-    DEBUGTEXT.text += sprintf('\nPlayer N: [%s]\nPlayer E: [%s]\nPlayer S: [%s]\nPlayer W: [%s]', cmgr.gridCheck(player.gPos.plus(Vec(0, -1))), cmgr.gridCheck(player.gPos.plus(Vec(1, 0))), cmgr.gridCheck(player.gPos.plus(Vec(0, 1))), cmgr.gridCheck(player.gPos.plus(Vec(-1, 0))));;
-    var civ2plr = Vec2.angleBetween(player.pos.minus(civ.pos), DirVec.SOUTH);
-    DEBUGTEXT.text += sprintf('\nCiv->Player angle: [%f]', civ2plr);
-    for (var i = game_objects.length - 1; i >= 0; i--)
-    {
-        game_objects[i].update(delta);
-    };
-    DEBUGTEXT.text += sprintf('\nPlayer grid position: %s', player.gPos.toString());
-    DEBUGTEXT.text += sprintf('\nPlayer position: %s', player.pos.toString());
+        case GameSate.PLAYING:
+            cmgr.clearTheGrid();
+            for (var i = game_objects.length - 1; i >= 0; i--)
+            {
+                cmgr.addToTheGrid(game_objects[i]);
+            };
+            // Oh baby this is a big line
+            DEBUGTEXT.text += sprintf('\nPlayer N: [%s]\nPlayer E: [%s]\nPlayer S: [%s]\nPlayer W: [%s]', cmgr.gridCheck(player.gPos.plus(Vec(0, -1))), cmgr.gridCheck(player.gPos.plus(Vec(1, 0))), cmgr.gridCheck(player.gPos.plus(Vec(0, 1))), cmgr.gridCheck(player.gPos.plus(Vec(-1, 0))));;
+            var civ2plr = Vec2.angleBetween(player.pos.minus(civ.pos), DirVec.SOUTH);
+            DEBUGTEXT.text += sprintf('\nCiv->Player angle: [%f]', civ2plr);
+            for (var i = game_objects.length - 1; i >= 0; i--)
+            {
+                game_objects[i].update(delta);
+            };
+            DEBUGTEXT.text += sprintf('\nPlayer grid position: %s', player.gPos.toString());
+            DEBUGTEXT.text += sprintf('\nPlayer position: %s', player.pos.toString());
+            break;
+        case GameSate.DEAD:
+            if (this.waitingForTween)
+            {
+                break;
+            }
+            else
+            {
+                if (Input.keyPressed(Keys.R))
+                {
+                    console.log('Restart the game');
+                }
+            }
+            break;
+    }
     // Clean up keysLastDown
     for (var key in Input.keysLastDown)
     {
@@ -147,10 +212,33 @@ function update(delta)
     }
 }
 
+function endGame()
+{
+    gui_elements['dead_gui'].visible = true;
+    gui_elements['dead_gui'].alpha = 0;
+    state = GameSate.DEAD;
+    // Tween that mofo in
+    this.waitingForTween = true;
+    var tweenIn = new TWEEN.Tween(
+    {
+        'alpha': 0
+    }).to(
+    {
+        'alpha': 1
+    }, 2000).easing(TWEEN.Easing.Quadratic.In).onUpdate(function()
+    {
+        gui_elements['dead_gui'].alpha = this.alpha;
+    }).onComplete(function()
+    {
+        waitingForTween = false;
+    }).start();
+}
+
 function animate(delta)
 {
     requestAnimationFrame(animate);
     renderer.render(world);
+    renderer.render(GUI);
     renderer.render(DEBUGTEXT);
     renderer.render(DEBUGGFX);
 }

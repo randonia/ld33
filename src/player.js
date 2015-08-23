@@ -140,4 +140,5 @@ Player.prototype.getShot = function(shooter)
     this.state = GameObjectState.DEAD;
     this.animationState = AnimationState.SHOT;
     this.setSprite(this.animations['shot']);
+    endGame();
 };
