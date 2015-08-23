@@ -68,11 +68,6 @@ Grid.prototype.buildSprite = function()
             {
                 this.tiles[x] = [];
             }
-            // DBG
-            if (!tileKey.passable)
-            {
-                tileSprite.tint = 0xFF0000;
-            }
             this.tiles[x][y] = {
                 'sprite': tileSprite,
                 'passable': tileKey.passable
