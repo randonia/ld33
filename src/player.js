@@ -38,7 +38,7 @@ function Player()
 Player.prototype = new GameObject();
 Player.prototype.getCardObj = function(dir)
 {
-    return cmgr.gridCheck(this.gPos.plus(dir));
+    return cmgr.gridCheck(this.gPos.plus(DirVec[Direction[dir]]));
 };
 Player.prototype.isDirPassable = function(dir)
 {
@@ -57,8 +57,7 @@ Player.prototype.update = function(delta)
                 var targetObj;
                 this.facingDirection = ret['dir'];
                 this.animationState = AnimationState.WALKING;
-                var dir = Direction[ret['dir']];
-                if ((targetObj = this.getCardObj(dir)) || !(targetObj = this.isDirPassable(ret['dir'])).passable)
+                if ((targetObj = this.getCardObj(ret['dir'])) || !(targetObj = this.isDirPassable(ret['dir'])).passable)
                 {
                     console.log(sprintf('Blocked by %s to the %s', targetObj, 'NORTH'));
                 }
