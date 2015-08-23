@@ -18,6 +18,11 @@ LEVEL1_KEYS = {
     'c': {'sprite': 'objects_1', 'passable': false},  // crate
     'b': {'sprite': 'objects_2', 'passable': false},  // drum
 }
+LEVEL1_ENTITIES = [
+    { type: 'player',   direction: Direction.SOUTH , pos: Vec(0, 0)},
+    { type: 'police',   direction: Direction.SOUTH , pos: Vec(4, -4)},
+    { type: 'civilian', direction: Direction.SOUTH , pos: Vec(4, 0)},
+]
 LEVEL1_MAP = [
     'X X X X X X X X X X X X X X X X X X X X X X',
     'X 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 X',

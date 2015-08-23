@@ -95,8 +95,6 @@ function onAssetsComplete()
 }
 var grid;
 var player;
-var civ;
-var police;
 // Collision manager
 var cmgr;
 
@@ -114,20 +112,8 @@ function build_world()
 
 function build_avatars()
 {
-    // Create the game objects
-    player = new Player();
-    player.gPos = Vec(0, 0);
-    player.pos = grid.gridToWorld(null, player.gPos);
-    civ = new Civilian();
-    civ.gPos = Vec(4, 0)
-    civ.pos = grid.gridToWorld(null, civ.gPos);
-    police = new Police();
-    police.gPos = Vec(4, -4);
-    police.pos = grid.gridToWorld(null, police.gPos);
-    game_objects.push(civ);
-    game_objects.push(player);
-    game_objects.push(police);
     // Don't forget to add their sprite to the world
+    grid.build_entities(LEVEL1_ENTITIES);
     for (var i = 0; i < game_objects.length; ++i)
     {
         world.addChild(game_objects[i].spriteContainer);
@@ -137,8 +123,6 @@ function build_avatars()
 function reset_references()
 {
     player = undefined;
-    civ = undefined;
-    police = undefined;
 }
 
 function build_gui()
@@ -192,8 +176,6 @@ function update(delta)
             };
             // Oh baby this is a big line
             DEBUGTEXT.text += sprintf('\nPlayer N: [%s]\nPlayer E: [%s]\nPlayer S: [%s]\nPlayer W: [%s]', cmgr.gridCheck(player.gPos.plus(Vec(0, -1))), cmgr.gridCheck(player.gPos.plus(Vec(1, 0))), cmgr.gridCheck(player.gPos.plus(Vec(0, 1))), cmgr.gridCheck(player.gPos.plus(Vec(-1, 0))));;
-            var civ2plr = Vec2.angleBetween(player.pos.minus(civ.pos), DirVec.SOUTH);
-            DEBUGTEXT.text += sprintf('\nCiv->Player angle: [%f]', civ2plr);
             for (var i = game_objects.length - 1; i >= 0; i--)
             {
                 game_objects[i].update(delta);

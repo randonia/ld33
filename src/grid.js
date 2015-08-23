@@ -16,6 +16,32 @@ function Grid(level_map, level_keys)
     this.tiles = [];
     this.sprite = this.buildSprite();
 }
+Grid.prototype.build_entities = function(level_entities)
+{
+    this.level_entities = level_entities;
+    for (var e in level_entities)
+    {
+        var entityData = level_entities[e];
+        var entity;
+        switch (entityData.type)
+        {
+            case 'civilian':
+                entity = new Civilian();
+                break;
+            case 'police':
+                entity = new Police();
+                break;
+            case 'player':
+                entity = new Player();
+                player = entity;
+                break;
+        }
+        entity.facingDirection = entityData.direction;
+        entity.gPos = entityData.pos.clone();
+        entity.pos = this.gridToWorld(null, entity.gPos.clone());
+        game_objects.push(entity);
+    }
+};
 Grid.prototype.tileIsPassable = function(x, y)
 {
     if (this.tiles[x] && this.tiles[x][y])

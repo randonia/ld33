@@ -3,23 +3,16 @@ LD33 TODO List
 ==============
 
     Mechanics
-    + Turn based movement
-        synchronize all actors
-        'decision' making
-        'pathfinding'?
-    + actor perception and reaction
-        shooting
-        fleeing
-        alerting?
     + create actors
         civilian
-            base
+            # base
             animations
-            podmode
+            # podmode
             flight
-            perception
+            # perception
         police
-
+            perception
+            # shooting
     + player interaction
         # movement
         conversion

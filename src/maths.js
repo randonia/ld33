@@ -56,6 +56,9 @@ Vec2.prototype.mult = function(scalar)
 {
     return Vec(this.x * scalar, this.y * scalar);
 };
+Vec2.prototype.clone = function() {
+    return Vec(this.x, this.y);
+};
 // a.b= a1b1 + a2b2
 Vec2.dot = function(a, b)
 {
