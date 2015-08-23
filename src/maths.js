@@ -26,6 +26,9 @@ Vec2.prototype.magnitude = function()
 {
     return Math.sqrt((this.x * this.x) + (this.y * this.y));
 };
+Vec2.prototype.sqrMagnitude = function() {
+    return (this.x * this.x) + (this.y * this.y);
+};
 Vec2.prototype.add = function(otherVec)
 {
     this.x += otherVec.x;

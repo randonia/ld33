@@ -3,7 +3,7 @@
  */
 // Some trixie hacky setup of enums
 var GameObjectState = {
-    'list': ['IDLE', 'MOVING', 'DEAD'],
+    'list': ['IDLE', 'MOVING', 'FLEEING', 'ATTACKING', 'DEAD'],
     'NONE': 0x00
 };
 for (var i in GameObjectState.list)

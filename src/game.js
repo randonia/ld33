@@ -67,6 +67,7 @@ var dbg_text_opts = {
 var DEBUGTEXT = new PIXI.Text('Debug', dbg_text_opts);
 DEBUGTEXT.position.x = 10;
 DEBUGTEXT.position.y = 10;
+var DEBUGGFX = new PIXI.Graphics();
 
 function onAssetsComplete()
 {
@@ -91,6 +92,7 @@ var cmgr;
 function build_world()
 {
     world = new PIXI.Container();
+    DEBUGGFX.position = world.position;
     world.position.x = WIDTH * 0.5;
     world.position.y = HEIGHT * 0.5;
     grid = new Grid(32, 32);
@@ -112,6 +114,7 @@ function build_world()
 function update(delta)
 {
     DEBUGTEXT.text = Input.toDebugString();
+    DEBUGGFX.clear();
     cmgr.clearTheGrid();
     for (var i = game_objects.length - 1; i >= 0; i--)
     {
@@ -119,6 +122,8 @@ function update(delta)
     };
     // Oh baby this is a big line
     DEBUGTEXT.text += sprintf('\nPlayer N: [%s]\nPlayer E: [%s]\nPlayer S: [%s]\nPlayer W: [%s]', cmgr.gridCheck(player.gPos.plus(Vec(0, -1))), cmgr.gridCheck(player.gPos.plus(Vec(1, 0))), cmgr.gridCheck(player.gPos.plus(Vec(0, 1))), cmgr.gridCheck(player.gPos.plus(Vec(-1, 0))));;
+    var civ2plr = Vec2.angleBetween(player.pos.minus(civ.pos), DirVec.SOUTH);
+    DEBUGTEXT.text += sprintf('\nCiv->Player angle: [%f]', civ2plr);
     for (var i = game_objects.length - 1; i >= 0; i--)
     {
         game_objects[i].update(delta);
@@ -141,4 +146,5 @@ function animate(delta)
     requestAnimationFrame(animate);
     renderer.render(world);
     renderer.render(DEBUGTEXT);
+    renderer.render(DEBUGGFX);
 }
