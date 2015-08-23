@@ -84,6 +84,7 @@ function onAssetsComplete()
 }
 var grid;
 var player;
+var civ;
 // Collision manager
 var cmgr;
 
@@ -96,10 +97,7 @@ function build_world()
     world.addChild(grid.sprite);
     // Create the game objects
     player = new Player();
-    var go = new GameObject();
-    go.gPos = Vec(5, 5);
-    game_objects.push(go);
-    var civ = new Civilian();
+    civ = new Civilian();
     civ.gPos = Vec(4, 0)
     game_objects.push(civ);
     game_objects.push(player);

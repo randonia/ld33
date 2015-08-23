@@ -13,12 +13,19 @@ LD33 TODO List
         alerting?
     + create actors
         civilian
+            base
+            animations
+            podmode
+            flight
+            perception
         police
+
     + player interaction
         # movement
         conversion
         stealth
         death
+        # animations
 
     Art
     + A lot of sprites
