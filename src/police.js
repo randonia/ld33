@@ -20,7 +20,10 @@ function Police()
         }
         this.animations[sprintf('idle_%s', dir)] = this.buildMovieClip(animIdleName, idles);
         this.animations[sprintf('walking_%s', dir)] = this.buildMovieClip(animWalkName, walkings);
+        var shootName = sprintf('shoot_%s', dir);
+        this.animations[shootName] = this.buildMovieClip(shootName, [sprintf('police_shoot_%s_0.png', dir)]);
     }
+
     this.animationName = 'idle_south';
     this.setSprite(this.animations[this.animationName]);
     this.animationState = AnimationState.IDLE;

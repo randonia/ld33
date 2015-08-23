@@ -190,10 +190,7 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>images/player</filename>
-            <filename>images/terrain</filename>
-            <filename>images/civilian</filename>
-            <filename>images/police</filename>
+            <filename>images</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
