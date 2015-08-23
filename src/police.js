@@ -23,7 +23,6 @@ function Police()
         var shootName = sprintf('shoot_%s', dir);
         this.animations[shootName] = this.buildMovieClip(shootName, [sprintf('police_shoot_%s_0.png', dir)]);
     }
-
     this.animationName = 'idle_south';
     this.setSprite(this.animations[this.animationName]);
     this.animationState = AnimationState.IDLE;
@@ -33,9 +32,35 @@ Police.prototype.update = function(delta)
 {
     this._super.update.call(this, delta);
     var ret;
-    if (ret = this.perception.canSeeTarget(player))
+    if (player.state != GameObjectState.DEAD && (ret = this.perception.canSeeTarget(player)))
     {
-        // can see!
+        if (this.testLineOfSight(player))
+        {
+            this.shoot(player);
+        }
     }
     this.perception.debugDraw();
+    switch (this.state)
+    {
+        case GameObjectState.ATTACKING:
+            // some stuff
+            break;
+    }
+};
+Police.prototype.testLineOfSight = function(target)
+{
+    // Let's just skip this for now
+    return true;
+};
+Police.prototype.shoot = function(target)
+{
+    this.state = GameObjectState.ATTACKING;
+    this.animationName = sprintf('shoot_%s', Direction[this.facingDirection].toLowerCase());
+    this.setSprite(this.animations[this.animationName]);
+    // Play shoot sound
+    // Set up target
+    if (target instanceof Player)
+    {
+        target.getShot();
+    }
 };

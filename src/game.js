@@ -103,6 +103,7 @@ function build_world()
     civ = new Civilian();
     civ.gPos = Vec(4, 0)
     police = new Police();
+    police.pos = grid.gridToWorld(null, police.gPos);
     police.gPos = Vec(4, -4);
     game_objects.push(civ);
     game_objects.push(player);

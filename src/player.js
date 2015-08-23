@@ -2,7 +2,7 @@
  * Player class
  */
 var AnimationState = {
-    'list': ['IDLE', 'WALKING']
+    'list': ['IDLE', 'WALKING', 'SHOT']
 };
 for (var as in AnimationState.list)
 {
@@ -31,6 +31,8 @@ function Player()
         this.animations[sprintf('idle_%s', dir)] = this.buildMovieClip(animIdleName, idles);
         this.animations[sprintf('walking_%s', dir)] = this.buildMovieClip(animWalkName, walkings);
     }
+    this.animations['shot'] = this.buildMovieClip('shot', ['player_dead_shot_0.png', 'player_dead_shot_1.png']);
+    this.animations['shot'].loop = false;
     this.animationName = 'idle_south';
     this.setSprite(this.animations[this.animationName]);
     this.animationState = AnimationState.IDLE;
@@ -133,4 +135,10 @@ Player.prototype.updateAnimation = function()
     var animStr = AnimationState[this.animationState].toLowerCase();
     this.animationName = sprintf('%s_%s', animStr, dirStr);
     this.setSprite(this.animations[this.animationName]);
+};
+Player.prototype.getShot = function(shooter) {
+    this.shooter = shooter;
+    this.state = GameObjectState.DEAD;
+    this.animationState = AnimationState.SHOT;
+    this.setSprite(this.animations['shot']);
 };
