@@ -2,8 +2,18 @@
  * GameObject class. All displayed items use this.
  */
 // Some trixie hacky setup of enums
+var AnimationState = {
+    'list': ['IDLE', 'WALKING', 'SHOT', 'PODDING']
+};
+for (var as in AnimationState.list)
+{
+    AnimationState[AnimationState.list[as]] = 0x1 << as;
+    // This one needs to go back and forth
+    AnimationState[0x1 << as] = AnimationState.list[as];
+}
+delete AnimationState.list;
 var GameObjectState = {
-    'list': ['IDLE', 'MOVING', 'FLEEING', 'ATTACKING', 'DEAD'],
+    'list': ['IDLE', 'MOVING', 'FLEEING', 'ATTACKING', 'DEAD', 'PODDED'],
     'NONE': 0x00
 };
 for (var i in GameObjectState.list)
@@ -40,6 +50,8 @@ var MOVE_STOP_THRESHOLD = 1;
 
 function GameObject()
 {
+    this.spriteTint = 0xFFFFFF;
+    this.animationSpeed = 0.125;
     this.tag = Tag.NONE;
     this.pos = Vec(0, 0);
     this.gPos = Vec(0, 0);
@@ -87,10 +99,12 @@ GameObject.prototype.setSprite = function(sprite)
     if (sprite instanceof PIXI.extras.MovieClip)
     {
         this.sprite = sprite;
+        this.sprite.animationSpeed = this.animationSpeed;
         this.spriteContainer.position.x = this.pos.x;
         this.spriteContainer.position.y = this.pos.y;
         this.sprite.gotoAndPlay(0);
     }
+    this.sprite.tint = this.spriteTint;
     this.spriteContainer.addChild(this.sprite);
 };
 GameObject.prototype.update = function(delta)
@@ -130,4 +144,26 @@ GameObject.prototype.tickUpdatePosition = function(delta)
     }
     this.spriteContainer.position.x = this.pos.x;
     this.spriteContainer.position.y = this.pos.y;
+};
+GameObject.prototype.setTint = function(tint)
+{
+    this.spriteTint = tint;
+    this.sprite.tint = tint;
+};
+GameObject.prototype.setAnimSpeed = function(speed)
+{
+    this.animationSpeed = speed;
+    if (this.sprite instanceof PIXI.extras.MovieClip)
+    {
+        this.sprite.animationSpeed = this.animationSpeed;
+    }
+};
+GameObject.prototype.getPodded = function()
+{
+    this.state = GameObjectState.PODDED;
+    this.animationState = AnimationState.PODDING;
+    // this.setSprite(this.animations[''])
+    // For now just tint the damn thing
+    this.setTint(0x00FF00);
+    this.setAnimSpeed(0.01);
 };

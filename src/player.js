@@ -1,17 +1,6 @@
 /*
  * Player class
  */
-var AnimationState = {
-    'list': ['IDLE', 'WALKING', 'SHOT']
-};
-for (var as in AnimationState.list)
-{
-    AnimationState[AnimationState.list[as]] = 0x1 << as;
-    // This one needs to go back and forth
-    AnimationState[0x1 << as] = AnimationState.list[as];
-}
-delete AnimationState.list;
-
 function Player()
 {
     this._super = GameObject.prototype;
@@ -59,9 +48,18 @@ Player.prototype.update = function(delta)
                 var targetObj;
                 this.facingDirection = ret['dir'];
                 this.animationState = AnimationState.WALKING;
-                if ((targetObj = this.getCardObj(ret['dir'])) || !(targetObj = this.isDirPassable(ret['dir'])).passable)
+                if (!(targetObj = this.isDirPassable(ret['dir'])).passable)
                 {
                     console.log(sprintf('Blocked by %s to the %s', targetObj, 'NORTH'));
+                }
+                else if ((targetObj = this.getCardObj(ret['dir'])))
+                {
+                    // Pod that fool!
+                    if (targetObj.state != GameObjectState.PODDED)
+                    {
+                        console.log(sprintf('Podding %s at %s', targetObj, targetObj.gPos.toString()));
+                        targetObj.getPodded();
+                    }
                 }
                 else
                 {
@@ -136,7 +134,8 @@ Player.prototype.updateAnimation = function()
     this.animationName = sprintf('%s_%s', animStr, dirStr);
     this.setSprite(this.animations[this.animationName]);
 };
-Player.prototype.getShot = function(shooter) {
+Player.prototype.getShot = function(shooter)
+{
     this.shooter = shooter;
     this.state = GameObjectState.DEAD;
     this.animationState = AnimationState.SHOT;

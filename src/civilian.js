@@ -13,9 +13,16 @@ Civilian.prototype.update = function(delta)
 {
     this._super.update.call(this, delta);
     var ret;
-    if (ret = this.perception.canSeeTarget(player))
+    switch (this.state)
     {
-        // can see!
+        case GameObjectState.IDLE:
+            if (ret = this.perception.canSeeTarget(player))
+            {
+                // can see! must flee
+            }
+            break;
+        case GameObjectState.PODDED:
+            break;
     }
     this.perception.debugDraw();
 };
