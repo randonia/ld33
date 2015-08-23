@@ -108,8 +108,16 @@ function build_world()
     world.position.y = HEIGHT * 0.5;
     grid = new Grid(LEVEL1_MAP, LEVEL1_KEYS);
     world.addChild(grid.sprite);
+    build_avatars();
+    cmgr = new CollisionManager();
+}
+
+function build_avatars()
+{
     // Create the game objects
     player = new Player();
+    player.gPos = Vec(0, 0);
+    player.pos = grid.gridToWorld(null, player.gPos);
     civ = new Civilian();
     civ.gPos = Vec(4, 0)
     civ.pos = grid.gridToWorld(null, civ.gPos);
@@ -124,7 +132,13 @@ function build_world()
     {
         world.addChild(game_objects[i].spriteContainer);
     };
-    cmgr = new CollisionManager();
+}
+
+function reset_references()
+{
+    player = undefined;
+    civ = undefined;
+    police = undefined;
 }
 
 function build_gui()
@@ -197,6 +211,7 @@ function update(delta)
                 if (Input.keyPressed(Keys.R))
                 {
                     console.log('Restart the game');
+                    restartGame();
                 }
             }
             break;
@@ -232,6 +247,21 @@ function endGame()
     {
         waitingForTween = false;
     }).start();
+}
+
+function restartGame()
+{
+    for (var i in game_objects)
+    {
+        var go = game_objects[i];
+        world.removeChild(go.spriteContainer);
+        delete game_objects[i];
+    }
+    game_objects = [];
+    gui_elements['dead_gui'].visible = false;
+    reset_references();
+    build_avatars();
+    state = GameSate.PLAYING;
 }
 
 function animate(delta)

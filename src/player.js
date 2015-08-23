@@ -4,6 +4,8 @@
 function Player()
 {
     this._super = GameObject.prototype;
+    // For ze resets
+    this._super.constructor.call(this);
     this.animations = {};
     for (var d in Direction.list)
     {

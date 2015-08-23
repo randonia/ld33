@@ -32,16 +32,18 @@ Police.prototype.update = function(delta)
 {
     this._super.update.call(this, delta);
     var ret;
-    if (player.state != GameObjectState.DEAD && (ret = this.perception.canSeeTarget(player)))
-    {
-        if (this.testLineOfSight(player))
-        {
-            this.shoot(player);
-        }
-    }
-    this.perception.debugDraw();
     switch (this.state)
     {
+        case GameObjectState.IDLE:
+            if (player.state != GameObjectState.DEAD && (ret = this.perception.canSeeTarget(player)))
+            {
+                if (this.testLineOfSight(player))
+                {
+                    this.shoot(player);
+                }
+            }
+            this.perception.debugDraw();
+            break;
         case GameObjectState.ATTACKING:
             // some stuff
             break;
