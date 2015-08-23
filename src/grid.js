@@ -16,6 +16,14 @@ function Grid(level_map, level_keys)
     this.tiles = [];
     this.sprite = this.buildSprite();
 }
+Grid.prototype.tileIsPassable = function(x, y)
+{
+    if (this.tiles[x] && this.tiles[x][y])
+    {
+        return this.tiles[x][y];
+    }
+    return null;
+};
 // Pass in {'x':0, 'y':0}
 Grid.prototype.gridToWorld = function(prop, val)
 {
@@ -51,8 +59,8 @@ Grid.prototype.buildSprite = function()
         for (var y = -this.hHeight; y < this.hHeight; ++y)
         {
             var currLine = this.level_map[y + this.hHeight].replace(/\ /g, '');
-            var currImage = this.level_keys[currLine[x+this.hWidth]];
-            var tileSprite = new PIXI.Sprite(PIXI.Texture.fromImage(sprintf('%s.png', currImage)));
+            var tileKey = this.level_keys[currLine[x + this.hWidth]];
+            var tileSprite = new PIXI.Sprite(PIXI.Texture.fromImage(sprintf('%s.png', tileKey.sprite)));
             tileSprite.position.x = x * this.gridSize.x;
             tileSprite.position.y = y * this.gridSize.y;
             worldSprite.addChild(tileSprite);
@@ -60,7 +68,15 @@ Grid.prototype.buildSprite = function()
             {
                 this.tiles[x] = [];
             }
-            this.tiles[x][y] = tileSprite;
+            // DBG
+            if (!tileKey.passable)
+            {
+                tileSprite.tint = 0xFF0000;
+            }
+            this.tiles[x][y] = {
+                'sprite': tileSprite,
+                'passable': tileKey.passable
+            };
         }
     }
     var gridSprite = new PIXI.Graphics();

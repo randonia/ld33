@@ -40,6 +40,11 @@ Player.prototype.getCardObj = function(dir)
 {
     return cmgr.gridCheck(this.gPos.plus(dir));
 };
+Player.prototype.isDirPassable = function(dir)
+{
+    var newGpos = this.gPos.plus(DirVec[Direction[dir]]);
+    return grid.tileIsPassable(newGpos.x, newGpos.y);
+};
 Player.prototype.update = function(delta)
 {
     this._super.update.call(this, delta);
@@ -52,53 +57,32 @@ Player.prototype.update = function(delta)
                 var targetObj;
                 this.facingDirection = ret['dir'];
                 this.animationState = AnimationState.WALKING;
-                switch (ret['dir'])
+                var dir = Direction[ret['dir']];
+                if ((targetObj = this.getCardObj(dir)) || !(targetObj = this.isDirPassable(ret['dir'])).passable)
                 {
-                    case Direction.NORTH:
-                        if ((targetObj = this.getCardObj(DirVec.NORTH)))
-                        {
-                            console.log(sprintf('Blocked by %s to the %s', targetObj, 'NORTH'));
-                        }
-                        else
-                        {
-                            this.gPos.y -= 1;
-                        }
-                        break;
-                    case Direction.EAST:
-                        if ((targetObj = this.getCardObj(DirVec.EAST)))
-                        {
-                            console.log(sprintf('Blocked by %s to the %s', targetObj, 'EAST'));
-                        }
-                        else
-                        {
-                            this.gPos.x += 1;
-                        }
-                        break;
-                    case Direction.SOUTH:
-                        if ((targetObj = this.getCardObj(DirVec.SOUTH)))
-                        {
-                            console.log(sprintf('Blocked by %s to the %s', targetObj, 'SOUTH'));
-                        }
-                        else
-                        {
-                            this.gPos.y += 1;
-                        }
-                        break;
-                    case Direction.WEST:
-                        if ((targetObj = this.getCardObj(DirVec.WEST)))
-                        {
-                            console.log(sprintf('Blocked by %s to the %s', targetObj, 'WEST'));
-                        }
-                        else
-                        {
-                            this.gPos.x -= 1;
-                        }
-                        break;
+                    console.log(sprintf('Blocked by %s to the %s', targetObj, 'NORTH'));
                 }
-                if (!targetObj)
+                else
                 {
+                    switch (ret['dir'])
+                    {
+                        case Direction.NORTH:
+                            this.gPos.y -= 1;
+                            break;
+                        case Direction.EAST:
+                            this.gPos.x += 1;
+                            break;
+                        case Direction.SOUTH:
+                            this.gPos.y += 1;
+                            break;
+                        case Direction.WEST:
+                            this.gPos.x -= 1;
+                            break;
+                    }
                     this.updateAnimation();
                 }
+                if (!targetObj)
+                {}
                 this.state = GameObjectState.MOVING;
             }
             break;
