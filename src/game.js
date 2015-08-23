@@ -96,7 +96,7 @@ function build_world()
     DEBUGGFX.position = world.position;
     world.position.x = WIDTH * 0.5;
     world.position.y = HEIGHT * 0.5;
-    grid = new Grid(32, 32);
+    grid = new Grid(LEVEL1_MAP, LEVEL1_KEYS);
     world.addChild(grid.sprite);
     // Create the game objects
     player = new Player();

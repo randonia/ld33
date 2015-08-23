@@ -110,7 +110,7 @@
             <key>sizeConstraints</key>
             <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
             <key>forceSquared</key>
-            <false/>
+            <true/>
             <key>forceWordAligned</key>
             <false/>
             <key>maxRects</key>
@@ -190,7 +190,12 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>images</filename>
+            <filename>images/buildings</filename>
+            <filename>images/civilian</filename>
+            <filename>images/objects</filename>
+            <filename>images/player</filename>
+            <filename>images/police</filename>
+            <filename>images/terrain</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

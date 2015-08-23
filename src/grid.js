@@ -1,16 +1,18 @@
 /*
  * Grid class for managing player's movement
  */
-function Grid(width, height)
+function Grid(level_map, level_keys)
 {
+    this.level_map = level_map;
+    this.level_keys = level_keys;
     this.pos = Vec(0, 0);
     this.gridSize = Vec(32, 32);
     this.gridSize.hX = this.gridSize.x * 0.5;
     this.gridSize.hY = this.gridSize.y * 0.5;
-    this.width = width;
-    this.hWidth = this.width * 0.5;
-    this.height = height;
-    this.hHeight = this.height * 0.5;
+    this.width = level_map[0].replace(/\ /g, '').length;
+    this.hWidth = Math.floor(this.width * 0.5);
+    this.height = level_map.length;
+    this.hHeight = Math.floor(this.height * 0.5);
     this.tiles = [];
     this.sprite = this.buildSprite();
 }
@@ -44,11 +46,13 @@ Grid.prototype.worldToGrid = function(prop, val)
 Grid.prototype.buildSprite = function()
 {
     var worldSprite = new PIXI.Graphics();
-    for (var x = -this.hWidth; x <= this.hWidth; ++x)
+    for (var x = -this.hWidth; x < this.hWidth; ++x)
     {
-        for (var y = -this.hHeight; y <= this.hHeight; ++y)
+        for (var y = -this.hHeight; y < this.hHeight; ++y)
         {
-            var tileSprite = new PIXI.Sprite(PIXI.Texture.fromImage('ground_0.png'));
+            var currLine = this.level_map[y + this.hHeight].replace(/\ /g, '');
+            var currImage = this.level_keys[currLine[x+this.hWidth]];
+            var tileSprite = new PIXI.Sprite(PIXI.Texture.fromImage(sprintf('%s.png', currImage)));
             tileSprite.position.x = x * this.gridSize.x;
             tileSprite.position.y = y * this.gridSize.y;
             worldSprite.addChild(tileSprite);
