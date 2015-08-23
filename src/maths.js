@@ -27,6 +27,10 @@ Vec2.prototype.add = function(otherVec)
     this.x += otherVec.x;
     this.y += otherVec.y;
 };
+Vec2.prototype.plus = function(otherVec)
+{
+    return Vec(this.x + otherVec.x, this.y + otherVec.y);
+};
 Vec2.prototype.scale = function(scalar)
 {
     this.x *= scalar

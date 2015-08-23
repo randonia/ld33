@@ -84,6 +84,8 @@ function onAssetsComplete()
 }
 var grid;
 var player;
+// Collision manager
+var cmgr;
 
 function build_world()
 {
@@ -91,7 +93,7 @@ function build_world()
     world.position.x = WIDTH * 0.5;
     world.position.y = HEIGHT * 0.5;
     grid = new Grid(32, 32);
-    game_objects.push(grid);
+    world.addChild(grid.sprite);
     // Create the game objects
     player = new Player();
     var go = new GameObject();
@@ -104,18 +106,27 @@ function build_world()
     // Don't forget to add their sprite to the world
     for (var i = 0; i < game_objects.length; ++i)
     {
-        world.addChild(game_objects[i].sprite);
+        world.addChild(game_objects[i].spriteContainer);
     };
+    cmgr = new CollisionManager();
 }
 
 function update(delta)
 {
     DEBUGTEXT.text = Input.toDebugString();
+    cmgr.clearTheGrid();
+    for (var i = game_objects.length - 1; i >= 0; i--)
+    {
+        cmgr.addToTheGrid(game_objects[i]);
+    };
+    // Oh baby this is a big line
+    DEBUGTEXT.text += sprintf('\nPlayer N: [%s]\nPlayer E: [%s]\nPlayer S: [%s]\nPlayer W: [%s]', cmgr.gridCheck(player.gPos.plus(Vec(0, -1))), cmgr.gridCheck(player.gPos.plus(Vec(1, 0))), cmgr.gridCheck(player.gPos.plus(Vec(0, 1))), cmgr.gridCheck(player.gPos.plus(Vec(-1, 0))));;
     for (var i = game_objects.length - 1; i >= 0; i--)
     {
         game_objects[i].update(delta);
     };
     DEBUGTEXT.text += sprintf('\nPlayer grid position: %s', player.gPos.toString());
+    DEBUGTEXT.text += sprintf('\nPlayer position: %s', player.pos.toString());
     // Clean up keysLastDown
     for (var key in Input.keysLastDown)
     {
