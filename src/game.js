@@ -86,6 +86,7 @@ function onAssetsComplete()
 var grid;
 var player;
 var civ;
+var police;
 // Collision manager
 var cmgr;
 
@@ -101,8 +102,11 @@ function build_world()
     player = new Player();
     civ = new Civilian();
     civ.gPos = Vec(4, 0)
+    police = new Police();
+    police.gPos = Vec(4, -4);
     game_objects.push(civ);
     game_objects.push(player);
+    game_objects.push(police);
     // Don't forget to add their sprite to the world
     for (var i = 0; i < game_objects.length; ++i)
     {

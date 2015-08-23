@@ -193,6 +193,7 @@
             <filename>images/player</filename>
             <filename>images/terrain</filename>
             <filename>images/civilian</filename>
+            <filename>images/police</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
