@@ -28,7 +28,7 @@ This LDJAM was all about learning JavaScript and respective libraries for game d
 I ran out of time, so generating interesting and puzzling level ideas wasn't something I was able to put together in time, but it's open to extension by you (aren't game jams fun).  
 Adding new maps is a simple process. There are only a few steps required. 
 
-1) Create a new level data file in src/data/ named 'levelX.js', where X is the zero indexed number.
+1) Create a new level data file in src/data/ named 'levelX.js', where X is the zero indexed number.  
 2) Add to the data file three properties:  
    **LEVELX_KEYS** - dictionary of character keys for defining tiles.
 
