@@ -94,6 +94,6 @@ which has a monkey patch for Windows to make it not slow
 [10]: https://github.com/randonia/ld33
 [11]: www.warmplace.ru/soft/sunvox/
 
-[20]: [https://raw.githubusercontent.com/randonia/ld33/screenshots/screenshots/screenshot_1.PNG]
-[21]: [https://raw.githubusercontent.com/randonia/ld33/screenshots/screenshots/screenshot_2.PNG]
-[22]: [https://raw.githubusercontent.com/randonia/ld33/screenshots/screenshots/screenshot_3.png]
+[20]: https://raw.githubusercontent.com/randonia/ld33/screenshots/screenshots/screenshot_1.PNG
+[21]: https://raw.githubusercontent.com/randonia/ld33/screenshots/screenshots/screenshot_2.PNG
+[22]: https://raw.githubusercontent.com/randonia/ld33/screenshots/screenshots/screenshot_3.png
