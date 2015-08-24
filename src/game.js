@@ -192,7 +192,7 @@ function build_victory_gui()
         strokeThickness: 3
     }
     var continue_str;
-    if (this.curr_level == LEVELS.length - 1)
+    if (this.curr_level < LEVELS.length - 1)
     {
         continue_text = new PIXI.Text('Press [E] to Go to next level', continue_gui_opts);
     }
@@ -355,6 +355,7 @@ function endGame(victory)
 function loadLevel(level_index)
 {
     reset_references();
+    console.log(game_objects, pod_targets);
     this.curr_level = level_index;
     build_world(this.curr_level);
 

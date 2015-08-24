@@ -7,6 +7,7 @@ function Player()
     // For ze resets
     this._super.constructor.call(this);
     this.animations = {};
+    this.animationSpeed = 0.125;
     for (var d in Direction.list)
     {
         var dir = Direction.list[d].toLowerCase();
