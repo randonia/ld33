@@ -92,6 +92,11 @@ function onAssetsComplete()
         update(delta);
         last_frame = curr_frame;
     }, 1000 / FPS);
+    this.bgm = document.getElementById('bgm');
+    if (bgm)
+    {
+        bgm.play();
+    }
 }
 var grid;
 var player;
