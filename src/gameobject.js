@@ -169,12 +169,7 @@ GameObject.prototype.getPodded = function()
     this.setAnimSpeed(0.01);
     if (pod_targets.indexOf(this) != -1)
     {
-        console.log('Podding ', pod_targets.indexOf(this), this);
         pod_targets.splice(pod_targets.indexOf(this), 1)
-    }
-    else
-    {
-        console.log("etf");
     }
     checkVictory();
 };

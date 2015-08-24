@@ -60,8 +60,9 @@ Player.prototype.update = function(delta)
                     // Pod that fool!
                     if (targetObj.state != GameObjectState.PODDED)
                     {
-                        console.log(sprintf('Podding %s at %s', targetObj, targetObj.gPos.toString()));
                         targetObj.getPodded();
+                        sound_pod_fx.currentTime = 0;
+                        sound_pod_fx.play();
                     }
                 }
                 else

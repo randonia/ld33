@@ -19,8 +19,9 @@ LEVEL1_KEYS = {
     'b': {'sprite': 'objects_2', 'passable': false},  // drum
 }
 LEVEL1_ENTITIES = [
-    { type: 'player',   direction: Direction.SOUTH , pos: Vec(0, 0)},
-    { type: 'police',   direction: Direction.SOUTH , pos: Vec(4, -4)},
+    { type: 'player',   direction: Direction.SOUTH , pos: Vec(-1, 0)},
+    { type: 'police',   direction: Direction.SOUTH , pos: Vec(4, -3)},
+    { type: 'police',   direction: Direction.WEST , pos: Vec(8, 1)},
     { type: 'civilian', direction: Direction.SOUTH , pos: Vec(4, 0)},
 ]
 LEVEL1_MAP = [
@@ -28,13 +29,13 @@ LEVEL1_MAP = [
     'X00010000000000000000X',
     'X00010000000000000000X',
     'X0001000U000000000000X',
-    'X000100HrJ00000000000X',
-    'X000111BNB11111111111X',
-    'X0000010D010000000000X',
-    'X00000111110000000000X',
+    'X000100HrJ01110000000X',
+    'X000111BNB11f11111111X',
+    'X0000010D010f001BBBB0X',
+    'X00000111110fff100000X',
+    'X00000000011111100000X',
     'X00000000000000000000X',
-    'X00000000000000000000X',
-    'X00000000000fffffffffX',
+    'X00000000000ffffffff0X',
     'X00000000000000000000X',
     'X00000000000000000000X',
     'X00000000000000000000X',

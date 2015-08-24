@@ -6,7 +6,7 @@ function Perception(parent)
     this.parent = parent;
     // Total vision of this unit
     this.visionDistance = 150;
-    this.visionAngle = 40;
+    this.visionAngle = 45;
     this.canSee = false;
     this.target = undefined;
     this.distanceToTarget = Infinity;

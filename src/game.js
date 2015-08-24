@@ -81,6 +81,7 @@ var GameState = {
 var state = GameState.PLAYING;
 var sound_bgm;
 var sound_gunshot;
+var sound_pod_fx;
 
 function onAssetsComplete()
 {
@@ -105,6 +106,8 @@ function onAssetsComplete()
     }
     sound_gunshot = document.getElementById('gun_shot');
     sound_gunshot.loop = false;
+    sound_pod_fx = document.getElementById('pod_fx');
+    sound_pod_fx.loop = false;
 }
 var grid;
 var player;
@@ -175,21 +178,29 @@ function build_victory_gui()
     shade.position.x = -victory_gui.position.x;
     shade.position.y = -victory_gui.position.y;
     victory_gui.addChild(shade);
+    var winColor = 0x00e62e;
     var vic_gui_opts = {
         font: '32px Trebuchet MS',
-        fill: 'green',
+        align: 'center',
+        fill: winColor,
         stroke: 'black',
-        strokeThickness: 3
+        strokeThickness: 3,
+        wordWrapWidth: 400,
+        wordWrap: true
     }
-    var win_text = new PIXI.Text('All citizens converted.' + '\n        Good work.', vic_gui_opts);
+    var win_str = (this.curr_level < LEVELS.length - 1) ? 'All citizens in this zone converted' : 'All citizens converted';
+    var win_text = new PIXI.Text(win_str + '\nGood work.', vic_gui_opts);
     win_text.position.x = -Math.floor(win_text.width * 0.5);
     victory_gui.addChild(win_text);
     var continue_gui_opts = {
         font: '18px Trebuchet MS',
         size: 20,
-        fill: 'green',
+        align: 'center',
+        fill: winColor,
         stroke: 'black',
-        strokeThickness: 3
+        strokeThickness: 3,
+        wordWrapWidth: 350,
+        wordWrap: true
     }
     var continue_str;
     if (this.curr_level < LEVELS.length - 1)
@@ -198,7 +209,23 @@ function build_victory_gui()
     }
     else
     {
+        win_text.position.y = -200;
         continue_text = new PIXI.Text('Press [E] to End the game and restart', continue_gui_opts);
+        var gg_opts = {
+            font: '18px Trebuchet MS',
+            size: 20,
+            align: 'center',
+            fill: winColor,
+            stroke: 'black',
+            strokeThickness: 3,
+            wordWrapWidth: 600,
+            wordWrap: true
+        }
+        var gg_str = 'Made by @zambini845\nThanks for playing!\nIf you would like to build levels, check out the README.\nHope you had fun and got to make a great game during #LDJAM!';
+        var gg_text = new PIXI.Text(gg_str, gg_opts);
+        gg_text.position.x = -Math.floor(gg_text.width * 0.5);
+        gg_text.position.y = continue_text.position.y + 100;
+        victory_gui.addChild(gg_text);
     }
     continue_text.position.x = -Math.floor(continue_text.width * 0.5);
     continue_text.position.y = win_text.position.y + 150;
@@ -310,6 +337,7 @@ function endGame(victory)
     if (victory)
     {
         // Do next level or full win
+        build_victory_gui()
         gui_elements['victory_gui'].visible = true;
         gui_elements['victory_gui'].alpha = 0;
         state = GameState.LEVEL_END;
@@ -355,15 +383,14 @@ function endGame(victory)
 function loadLevel(level_index)
 {
     reset_references();
-    console.log(game_objects, pod_targets);
     this.curr_level = level_index;
     build_world(this.curr_level);
-
 }
+
 function restartGame(level)
 {
     reset_references();
-    this.curr_level = (level)?level:0;
+    this.curr_level = (level) ? level : 0;
     loadLevel(this.curr_level);
     state = GameState.PLAYING;
 }
