@@ -37,10 +37,11 @@ Perception.prototype.canSeeTarget = function(otherObj)
 };
 Perception.prototype.debugDraw = function()
 {
-    var visionDir = DirVec[Direction[this.parent.facingDirection]].mult(this.visionDistance);
-    DEBUGGFX.lineStyle(1, 0xFFFFFF, 0.25);
-    DEBUGGFX.moveTo(this.parent.pos.x, this.parent.pos.y);
-    DEBUGGFX.lineTo(this.parent.pos.x + visionDir.x, this.parent.pos.y + visionDir.y);
+    // var visionDir = DirVec[Direction[this.parent.facingDirection]].mult(this.visionDistance);
+    // DEBUGGFX.lineStyle(1, 0xFFFFFF, 0.25);
+    // DEBUGGFX.moveTo(this.parent.pos.x, this.parent.pos.y);
+    // DEBUGGFX.lineTo(this.parent.pos.x + visionDir.x, this.parent.pos.y + visionDir.y);
+    // this looks really badass, even though it's using the debugger. So I'm just leaving it
     if (this.target)
     {
         DEBUGGFX.lineStyle(1, (this.canSee) ? 0xFF0000 : 0xFFFFFF);

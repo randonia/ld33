@@ -75,7 +75,8 @@ var GameSate = {
     'DEAD': 0x02
 };
 var state = GameSate.PLAYING;
-
+var sound_bgm;
+var sound_gunshot;
 function onAssetsComplete()
 {
     build_world();
@@ -92,11 +93,13 @@ function onAssetsComplete()
         update(delta);
         last_frame = curr_frame;
     }, 1000 / FPS);
-    this.bgm = document.getElementById('bgm');
-    if (bgm)
+    sound_bgm = document.getElementById('bgm');
+    if (sound_bgm)
     {
-        bgm.play();
+        sound_bgm.play();
     }
+    sound_gunshot = document.getElementById('gun_shot');
+    sound_gunshot.loop = false;
 }
 var grid;
 var player;

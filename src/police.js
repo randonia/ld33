@@ -64,5 +64,9 @@ Police.prototype.shoot = function(target)
     if (target instanceof Player)
     {
         target.getShot();
+        if (sound_gunshot)
+        {
+            sound_gunshot.play();
+        }
     }
 };
