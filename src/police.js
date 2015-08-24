@@ -4,6 +4,7 @@
 function Police()
 {
     this._super = GameObject.prototype;
+    this._super.constructor.call(this);
     this.tag |= Tag.CIVILIAN;
     this.perception = new Perception(this);
     for (var d in Direction.list)

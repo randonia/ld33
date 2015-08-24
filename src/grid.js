@@ -41,6 +41,7 @@ Grid.prototype.build_entities = function(level_entities)
         entity.facingDirection = entityData.direction;
         entity.gPos = entityData.pos.clone();
         entity.pos = this.gridToWorld(null, entity.gPos.clone());
+        entity.updateAnimation();
         game_objects.push(entity);
     }
 };
@@ -48,6 +49,11 @@ Grid.prototype.tileIsPassable = function(x, y)
 {
     if (this.tiles[x] && this.tiles[x][y])
     {
+        // Reject edge tiles
+        if (Math.abs(x) == this.hWidth || Math.abs(y) == this.hHeight)
+        {
+            return null;
+        }
         return this.tiles[x][y];
     }
     return null;
@@ -61,8 +67,8 @@ Grid.prototype.gridToWorld = function(prop, val)
     }
     if (val instanceof Vec2)
     {
-        var x = this.pos['x'] + val * this.gridSize['x'] + (this.gridSize['x'] * 0.5)
-        var y = this.pos['y'] + val * this.gridSize['y'] + (this.gridSize['y'] * 0.5)
+        var x = this.pos['x'] + val.x * this.gridSize['x'] + (this.gridSize['x'] * 0.5)
+        var y = this.pos['y'] + val.y * this.gridSize['y'] + (this.gridSize['y'] * 0.5)
         return Vec(x, y);
     }
 };

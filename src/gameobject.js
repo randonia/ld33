@@ -51,7 +51,8 @@ var MOVE_STOP_THRESHOLD = 1;
 function GameObject()
 {
     this.spriteTint = 0xFFFFFF;
-    this.animationSpeed = 0.125;
+    this.animationSpeed = 0.125 - Math.random() * 0.125;
+    this.animationState = AnimationState.IDLE;
     this.tag = Tag.NONE;
     this.pos = Vec(0, 0);
     this.gPos = Vec(0, 0);
@@ -171,4 +172,11 @@ GameObject.prototype.getPodded = function()
         pod_targets.splice(this, 1)
     }
     checkVictory();
+};
+GameObject.prototype.updateAnimation = function()
+{
+    var dirStr = Direction[this.facingDirection].toLowerCase();
+    var animStr = AnimationState[this.animationState].toLowerCase();
+    this.animationName = sprintf('%s_%s', animStr, dirStr);
+    this.setSprite(this.animations[this.animationName]);
 };

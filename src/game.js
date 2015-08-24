@@ -18,6 +18,8 @@ var GUI;
 var gui_elements = {};
 var game_objects = [];
 var pod_targets = [];
+var LEVELS = ['LEVEL0', 'LEVEL1', 'LEVEL2'];
+var curr_level = 0;
 // Build Keys.* to map to their keyCodes
 Keys = {};
 Input = {
@@ -71,18 +73,18 @@ var DEBUGTEXT = new PIXI.Text('Debug', dbg_text_opts);
 DEBUGTEXT.position.x = 10;
 DEBUGTEXT.position.y = 10;
 var DEBUGGFX = new PIXI.Graphics();
-var GameSate = {
+var GameState = {
     'PLAYING': 0x01,
     'DEAD': 0x02,
     'LEVEL_END': 0x04
 };
-var state = GameSate.PLAYING;
+var state = GameState.PLAYING;
 var sound_bgm;
 var sound_gunshot;
 
 function onAssetsComplete()
 {
-    build_world();
+    build_world(0);
     build_gui();
     requestAnimationFrame(animate);
     var FPS = 60;
@@ -109,22 +111,26 @@ var player;
 // Collision manager
 var cmgr;
 
-function build_world()
+function build_world(level_id)
 {
     world = new PIXI.Container();
     DEBUGGFX.position = world.position;
     world.position.x = WIDTH * 0.5;
     world.position.y = HEIGHT * 0.5;
-    grid = new Grid(LEVEL1_MAP, LEVEL1_KEYS);
+    var level_str = sprintf('LEVEL%s', this.curr_level);
+    var keys = this[sprintf('%s_KEYS', level_str)];
+    var map = this[sprintf('%s_MAP', level_str)];
+    grid = new Grid(map, keys);
     world.addChild(grid.sprite);
-    build_avatars();
+    build_avatars(level_str);
     cmgr = new CollisionManager();
 }
 
-function build_avatars()
+function build_avatars(level_str)
 {
     // Don't forget to add their sprite to the world
-    grid.build_entities(LEVEL1_ENTITIES);
+    var entities = this[sprintf('%s_ENTITIES', level_str)];
+    grid.build_entities(entities);
     for (var i = 0; i < game_objects.length; ++i)
     {
         world.addChild(game_objects[i].spriteContainer);
@@ -134,6 +140,19 @@ function build_avatars()
 function reset_references()
 {
     player = undefined;
+    for (var i in game_objects)
+    {
+        var go = game_objects[i];
+        world.removeChild(go.spriteContainer);
+        delete game_objects[i];
+    }
+    game_objects = [];
+    pod_targets = [];
+    for (var eid in gui_elements)
+    {
+        gui_elements[eid].visible = false;
+    }
+    state = GameState.PLAYING;
 }
 
 function build_gui()
@@ -172,8 +191,15 @@ function build_victory_gui()
         stroke: 'black',
         strokeThickness: 3
     }
-    // var continue_text = new PIXI.Text('Press [E] to Go to next level', continue_gui_opts);
-    var continue_text = new PIXI.Text('Press [E] to End the game and restart', continue_gui_opts);
+    var continue_str;
+    if (this.curr_level == LEVELS.length - 1)
+    {
+        continue_text = new PIXI.Text('Press [E] to Go to next level', continue_gui_opts);
+    }
+    else
+    {
+        continue_text = new PIXI.Text('Press [E] to End the game and restart', continue_gui_opts);
+    }
     continue_text.position.x = -Math.floor(continue_text.width * 0.5);
     continue_text.position.y = win_text.position.y + 150;
     victory_gui.addChild(continue_text);
@@ -224,7 +250,7 @@ function update(delta)
     DEBUGGFX.clear();
     switch (state)
     {
-        case GameSate.PLAYING:
+        case GameState.PLAYING:
             cmgr.clearTheGrid();
             for (var i = game_objects.length - 1; i >= 0; i--)
             {
@@ -239,7 +265,7 @@ function update(delta)
             DEBUGTEXT.text += sprintf('\nPlayer grid position: %s', player.gPos.toString());
             DEBUGTEXT.text += sprintf('\nPlayer position: %s', player.pos.toString());
             break;
-        case GameSate.DEAD:
+        case GameState.DEAD:
             if (this.waitingForTween)
             {
                 break;
@@ -247,18 +273,25 @@ function update(delta)
             if (Input.keyPressed(Keys.R))
             {
                 console.log('Restart the game');
-                restartGame();
+                restartGame(this.curr_level);
             }
             break;
-        case GameSate.LEVEL_END:
+        case GameState.LEVEL_END:
             if (this.waitingForTween)
             {
                 break;
             }
             if (Input.keyPressed(Keys.E))
             {
-                console.log('Restart the game');
-                restartGame();
+                if (curr_level == LEVELS.length - 1)
+                {
+                    // At the end of level queue
+                    restartGame();
+                }
+                else
+                {
+                    loadLevel(curr_level + 1);
+                }
             }
     }
     // Clean up keysLastDown
@@ -279,7 +312,7 @@ function endGame(victory)
         // Do next level or full win
         gui_elements['victory_gui'].visible = true;
         gui_elements['victory_gui'].alpha = 0;
-        state = GameSate.LEVEL_END;
+        state = GameState.LEVEL_END;
         // Tween that mofo in
         this.waitingForTween = true;
         var tweenIn = new TWEEN.Tween(
@@ -300,7 +333,7 @@ function endGame(victory)
     {
         gui_elements['dead_gui'].visible = true;
         gui_elements['dead_gui'].alpha = 0;
-        state = GameSate.DEAD;
+        state = GameState.DEAD;
         // Tween that mofo in
         this.waitingForTween = true;
         var tweenIn = new TWEEN.Tween(
@@ -319,23 +352,19 @@ function endGame(victory)
     }
 }
 
-function restartGame()
+function loadLevel(level_index)
 {
-    for (var i in game_objects)
-    {
-        var go = game_objects[i];
-        world.removeChild(go.spriteContainer);
-        delete game_objects[i];
-    }
-    game_objects = [];
-    pod_targets = [];
-    for (var eid in gui_elements)
-    {
-        gui_elements[eid].visible = false;
-    }
     reset_references();
-    build_avatars();
-    state = GameSate.PLAYING;
+    this.curr_level = level_index;
+    build_world(this.curr_level);
+
+}
+function restartGame(level)
+{
+    reset_references();
+    this.curr_level = (level)?level:0;
+    loadLevel(this.curr_level);
+    state = GameState.PLAYING;
 }
 
 function checkVictory()

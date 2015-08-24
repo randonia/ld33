@@ -50,7 +50,7 @@ Player.prototype.update = function(delta)
                 var targetObj;
                 this.facingDirection = ret['dir'];
                 this.animationState = AnimationState.WALKING;
-                if (!(targetObj = this.isDirPassable(ret['dir'])).passable)
+                if (!(targetObj = this.isDirPassable(ret['dir'])) || !targetObj.passable)
                 {
                     console.log(sprintf('Blocked by %s to the %s', targetObj, 'NORTH'));
                 }
@@ -128,13 +128,6 @@ Player.prototype.handleInput = function()
     }
     // Prepare for more actions. Result should be an object of actionable items
     return result;
-};
-Player.prototype.updateAnimation = function()
-{
-    var dirStr = Direction[this.facingDirection].toLowerCase();
-    var animStr = AnimationState[this.animationState].toLowerCase();
-    this.animationName = sprintf('%s_%s', animStr, dirStr);
-    this.setSprite(this.animations[this.animationName]);
 };
 Player.prototype.getShot = function(shooter)
 {
