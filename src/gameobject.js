@@ -166,4 +166,9 @@ GameObject.prototype.getPodded = function()
     // For now just tint the damn thing
     this.setTint(0x00FF00);
     this.setAnimSpeed(0.01);
+    if (pod_targets.indexOf(this) != -1)
+    {
+        pod_targets.splice(this, 1)
+    }
+    checkVictory();
 };

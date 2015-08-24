@@ -17,6 +17,7 @@ var world;
 var GUI;
 var gui_elements = {};
 var game_objects = [];
+var pod_targets = [];
 // Build Keys.* to map to their keyCodes
 Keys = {};
 Input = {
@@ -72,11 +73,13 @@ DEBUGTEXT.position.y = 10;
 var DEBUGGFX = new PIXI.Graphics();
 var GameSate = {
     'PLAYING': 0x01,
-    'DEAD': 0x02
+    'DEAD': 0x02,
+    'LEVEL_END': 0x04
 };
 var state = GameSate.PLAYING;
 var sound_bgm;
 var sound_gunshot;
+
 function onAssetsComplete()
 {
     build_world();
@@ -136,6 +139,51 @@ function reset_references()
 function build_gui()
 {
     GUI = new PIXI.Container();
+    // You died gui
+    build_dead_gui();
+    // Victory gui
+    build_victory_gui();
+}
+
+function build_victory_gui()
+{
+    var victory_gui = new PIXI.Container();
+    victory_gui.position.x = WIDTH * 0.5;
+    victory_gui.position.y = HEIGHT * 0.5;
+    var shade = new PIXI.Graphics();
+    shade.beginFill(0x003300, 0.2);
+    shade.drawRect(0, 0, WIDTH, HEIGHT);
+    shade.position.x = -victory_gui.position.x;
+    shade.position.y = -victory_gui.position.y;
+    victory_gui.addChild(shade);
+    var vic_gui_opts = {
+        font: '32px Trebuchet MS',
+        fill: 'green',
+        stroke: 'black',
+        strokeThickness: 3
+    }
+    var win_text = new PIXI.Text('All citizens converted.' + '\n        Good work.', vic_gui_opts);
+    win_text.position.x = -Math.floor(win_text.width * 0.5);
+    victory_gui.addChild(win_text);
+    var continue_gui_opts = {
+        font: '18px Trebuchet MS',
+        size: 20,
+        fill: 'green',
+        stroke: 'black',
+        strokeThickness: 3
+    }
+    // var continue_text = new PIXI.Text('Press [E] to Go to next level', continue_gui_opts);
+    var continue_text = new PIXI.Text('Press [E] to End the game and restart', continue_gui_opts);
+    continue_text.position.x = -Math.floor(continue_text.width * 0.5);
+    continue_text.position.y = win_text.position.y + 150;
+    victory_gui.addChild(continue_text);
+    victory_gui.visible = false;
+    GUI.addChild(victory_gui);
+    gui_elements['victory_gui'] = victory_gui;
+}
+
+function build_dead_gui()
+{
     var dead_gui = new PIXI.Container();
     dead_gui.position.x = WIDTH * 0.5;
     dead_gui.position.y = HEIGHT * 0.5;
@@ -196,15 +244,23 @@ function update(delta)
             {
                 break;
             }
-            else
-            {
                 if (Input.keyPressed(Keys.R))
                 {
                     console.log('Restart the game');
                     restartGame();
                 }
-            }
             break;
+            case GameSate.LEVEL_END:
+            if( this.waitingForTween)
+            {
+                break;
+            }
+            if (Input.keyPressed(Keys.E))
+            {
+                console.log('Restart the game');
+                restartGame();
+            }
+
     }
     // Clean up keysLastDown
     for (var key in Input.keysLastDown)
@@ -217,26 +273,51 @@ function update(delta)
     }
 }
 
-function endGame()
+function endGame(victory)
 {
-    gui_elements['dead_gui'].visible = true;
-    gui_elements['dead_gui'].alpha = 0;
-    state = GameSate.DEAD;
-    // Tween that mofo in
-    this.waitingForTween = true;
-    var tweenIn = new TWEEN.Tween(
+    if (victory)
     {
-        'alpha': 0
-    }).to(
+        // Do next level or full win
+        gui_elements['victory_gui'].visible = true;
+        gui_elements['victory_gui'].alpha = 0;
+        state = GameSate.LEVEL_END;
+        // Tween that mofo in
+        this.waitingForTween = true;
+        var tweenIn = new TWEEN.Tween(
+        {
+            'alpha': 0
+        }).to(
+        {
+            'alpha': 1
+        }, 1200).easing(TWEEN.Easing.Quadratic.In).onUpdate(function()
+        {
+            gui_elements['victory_gui'].alpha = this.alpha;
+        }).onComplete(function()
+        {
+            waitingForTween = false;
+        }).start();
+    }
+    else
     {
-        'alpha': 1
-    }, 2000).easing(TWEEN.Easing.Quadratic.In).onUpdate(function()
-    {
-        gui_elements['dead_gui'].alpha = this.alpha;
-    }).onComplete(function()
-    {
-        waitingForTween = false;
-    }).start();
+        gui_elements['dead_gui'].visible = true;
+        gui_elements['dead_gui'].alpha = 0;
+        state = GameSate.DEAD;
+        // Tween that mofo in
+        this.waitingForTween = true;
+        var tweenIn = new TWEEN.Tween(
+        {
+            'alpha': 0
+        }).to(
+        {
+            'alpha': 1
+        }, 2000).easing(TWEEN.Easing.Quadratic.In).onUpdate(function()
+        {
+            gui_elements['dead_gui'].alpha = this.alpha;
+        }).onComplete(function()
+        {
+            waitingForTween = false;
+        }).start();
+    }
 }
 
 function restartGame()
@@ -248,10 +329,23 @@ function restartGame()
         delete game_objects[i];
     }
     game_objects = [];
-    gui_elements['dead_gui'].visible = false;
+    pod_targets = [];
+    for(var eid in gui_elements)
+    {
+        gui_elements[eid].visible = false;
+    }
     reset_references();
     build_avatars();
     state = GameSate.PLAYING;
+}
+
+function checkVictory()
+{
+    if (pod_targets.length == 0)
+    {
+        console.log('victory!');
+        endGame(true);
+    }
 }
 
 function animate(delta)

@@ -27,9 +27,11 @@ Grid.prototype.build_entities = function(level_entities)
         {
             case 'civilian':
                 entity = new Civilian();
+                pod_targets.push(entity);
                 break;
             case 'police':
                 entity = new Police();
+                pod_targets.push(entity);
                 break;
             case 'player':
                 entity = new Player();
