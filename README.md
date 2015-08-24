@@ -30,26 +30,26 @@ Adding new maps is a simple process. There are only a few steps required.
 
 1) Create a new level data file in src/data/ named 'levelX.js', where X is the zero indexed number.
 2) Add to the data file three properties:  
-    **LEVELX_KEYS** - dictionary of character keys for defining tiles.
+   **LEVELX_KEYS** - dictionary of character keys for defining tiles.
+
+      '0': {'sprite': 'ground_0', 'passable': true},      // dirt
+      '1': {'sprite': 'ground_1', 'passable': true},      // grass
+      'X': {'sprite': 'ground_2', 'passable': true},      // pavement
+
+   `'0'` is the key used in LEVELX_MAP  
+   `'sprite'` is the id of the sprite loaded into the spritesheet  
+   `'passable'` defines whether or not this tile blocks player movement  
+
+   **LEVELX_ENTITIES** - array holding instance definitions for the player and enemies
+
+      { type: 'player',   direction: Direction.SOUTH , pos: Vec(-1, 0)},
+      { type: 'police',   direction: Direction.WEST , pos: Vec(8, 1)},
+      { type: 'civilian', direction: Direction.SOUTH , pos: Vec(4, 0)},
+   `'type'` - choose from `['player', 'police', 'civilian']`  
+   `'direction'` - Choose a cardinal `NORTH, EAST, SOUTH, WEST` from `Direction`  
+   `'pos'` - grid coordinates of the instance's position
     
-        '0': {'sprite': 'ground_0', 'passable': true},      // dirt
-        '1': {'sprite': 'ground_1', 'passable': true},      // grass
-        'X': {'sprite': 'ground_2', 'passable': true},      // pavement
-        
-    `'0'` is the key used in LEVELX_MAP  
-    `'sprite'` is the id of the sprite loaded into the spritesheet  
-    `'passable'` defines whether or not this tile blocks player movement  
-    
-    **LEVELX_ENTITIES** - array holding instance definitions for the player and enemies
-    
-       { type: 'player',   direction: Direction.SOUTH , pos: Vec(-1, 0)},
-       { type: 'police',   direction: Direction.WEST , pos: Vec(8, 1)},
-       { type: 'civilian', direction: Direction.SOUTH , pos: Vec(4, 0)},
-    `'type'` - choose from `['player', 'police', 'civilian']`  
-    `'direction'` - Choose a cardinal `NORTH, EAST, SOUTH, WEST` from `Direction`  
-    `'pos'` - grid coordinates of the instance's position
-    
-    **LEVELX_MAP** - array of strings defining the map layout. The strings use character keys defined in `LEVELX_KEYS` to determine what goes where. Ultimtately, levels are generated simply by parsing each  line of `LEVELX_MAP` and using the character value to convert it into a tile object.
+   **LEVELX_MAP** - array of strings defining the map layout. The strings use character keys defined in `LEVELX_KEYS` to determine what goes where. Ultimtately, levels are generated simply by parsing each  line of `LEVELX_MAP` and using the character value to convert it into a tile object.
 
        'XXXXXXXXXXXXXXXXXXXXXX',
        'X00010000000000000000X',
