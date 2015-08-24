@@ -244,14 +244,14 @@ function update(delta)
             {
                 break;
             }
-                if (Input.keyPressed(Keys.R))
-                {
-                    console.log('Restart the game');
-                    restartGame();
-                }
+            if (Input.keyPressed(Keys.R))
+            {
+                console.log('Restart the game');
+                restartGame();
+            }
             break;
-            case GameSate.LEVEL_END:
-            if( this.waitingForTween)
+        case GameSate.LEVEL_END:
+            if (this.waitingForTween)
             {
                 break;
             }
@@ -260,7 +260,6 @@ function update(delta)
                 console.log('Restart the game');
                 restartGame();
             }
-
     }
     // Clean up keysLastDown
     for (var key in Input.keysLastDown)
@@ -330,7 +329,7 @@ function restartGame()
     }
     game_objects = [];
     pod_targets = [];
-    for(var eid in gui_elements)
+    for (var eid in gui_elements)
     {
         gui_elements[eid].visible = false;
     }
@@ -353,6 +352,6 @@ function animate(delta)
     requestAnimationFrame(animate);
     renderer.render(world);
     renderer.render(GUI);
-    renderer.render(DEBUGTEXT);
+    //renderer.render(DEBUGTEXT);
     renderer.render(DEBUGGFX);
 }
