@@ -23,3 +23,9 @@ LD33 TODO List
     Art
     + A lot of sprites
     + Minimal horror audio
+
+=================
+Gameplay Feedback
+=================
++ I don't understand why I'm not getting instantly shot
+    Potential fix: vision cones, LOS indicator
