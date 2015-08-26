@@ -2,7 +2,8 @@
 ![][20]  
 Definitely Human  
 [Play online][9]  
-[Source][10]
+[Source][10]  
+[Ludum Dare Entry page][12]
 
 
 
@@ -93,6 +94,7 @@ which has a monkey patch for Windows to make it not slow
 [9]: http://randonia.com/ld33
 [10]: https://github.com/randonia/ld33
 [11]: www.warmplace.ru/soft/sunvox/
+[12]: http://ludumdare.com/compo/ludum-dare-33/?action=preview&uid=29047
 
 [20]: https://raw.githubusercontent.com/randonia/ld33/screenshots/screenshots/screenshot_1.PNG
 [21]: https://raw.githubusercontent.com/randonia/ld33/screenshots/screenshots/screenshot_2.PNG
