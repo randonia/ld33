@@ -1,9 +1,54 @@
 /* LD33 Style Sheet */
 
 .body-main {
-    background-color: rgba(55, 55, 55, 1);
+    background-color: rgb(35, 35, 35);
+    font-family: monospace;
 }
+/* I'm sorry Seth */
 
+h1, h2 {
+    color: rgb(72, 100, 3);
+    margin: 0px;
+    text-align: center;
+    text-shadow: 1px 1px black;
+}
+h1 {
+    text-decoration: underline;
+}
+h3 {
+    margin: 10px 0 5px 10px;
+}
+li {
+    list-style-type: none;
+    list-style-type: hiragana;
+}
+a {
+    color: rgb(52, 72, 1);
+}
+.div-titles {
+    background-color: rgba(13, 13, 13, 0.5);
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQIW2NkYGD4D8SMQAwGMAZcEC4DU4ksANLxHwCC4QQE/R3QmAAAAABJRU5ErkJggg==);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 1px solid rgba(137, 137, 137, 1.0);
+    padding-bottom: 15px;
+    padding-top: 5px;
+    width: 640px;
+    text-align: center;
+}
+.game-wrapper {
+    position: absolute;
+    left: calc(50% - 320px);
+}
+.div-instructions {
+    border: 1px solid rgba(137, 137, 137, 1.0);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: rgb(52, 72, 1);
+    background-color: rgba(13, 13, 13, 1);
+    padding: 0 5px 0 5px;
+    width: 630px;
+}
 .div-main {
     background-color: rgba(12, 12, 12, 1);
     border-top: 1px solid #A9A9A9;

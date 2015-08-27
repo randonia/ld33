@@ -5,10 +5,31 @@
         <link rel="stylesheet" href="styles/sheet.css" />
     </head>
     <body class="body-main">
-    <div class="div-main" id="game-container"></div>
+    <div class="game-wrapper">
+        <div class="div-titles">
+            <h1>Definitely Human</h1>
+            <h2>Theme: You Are The Monster</h2>
+        </div>
+        <div class="div-main" id="game-container"></div>
         <audio src="assets/audio/bgm.mp3" loop id="bgm"></audio>
         <audio src="assets/audio/gun_shot.mp3" loop id="gun_shot"></audio>
         <audio src="assets/audio/pod_fx.mp3" loop id="pod_fx"></audio>
+        <div class="div-instructions"><p><i>You are the monster. You've landed on Earth with one goal in mind: enslave humanity. Luckily, through millenia of superior gene manipulation, when you merely touch a lower life form, you immediately start the conversion process, turning them green and letting you proceed to the next level</i>
+
+<br/><a href="https://twitter.com/zambini845">Tweet @zambini845</a>
+<h3>Goal</h3>
+Convert every NPC. But don't get caught: You aren't bulletproof. Merely walk up behind someone and touch them to convert.
+
+<h3>Controls</h3>
+<ul><li>WASD - Movement</li></ul>
+
+<h3>Release Notes</h3>
+
+On slower machines, the end-level logic might appear to freeze. I used Tweenjs for the transitions, and that seems to not behave well sometimes. I tested this in Chrome on Windows7 on an ASUS netbook, and everything ran as expected except for the level-ending gui.
+
+This LDJAM was all about learning JavaScript and respective libraries for game development. Granted this code is jam quality, but it serves as a good foundation for future projects in terms of what to do and not to do for production quality games.
+</p></div>
+    </div>
     </body>
     <script type="text/javascript" src="src/lib/Tween.js"></script>
     <script type="text/javascript" src="src/lib/pixi.js"></script>
